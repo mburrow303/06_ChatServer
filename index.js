@@ -15,7 +15,7 @@ db.once('open', () => console.log(`Connected to: ${MONGO}`));
 
 const user = require('./controllers/user.controller')
 
-
+app.use('/user', user);
 
 app.use(express.json());
 
