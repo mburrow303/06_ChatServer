@@ -14,6 +14,8 @@ const db = mongoose.connection;
 db.once('open', () => console.log(`Connected to: ${MONGO}`));
 
 const user = require('./controllers/user.controller')
+
+//app.use('/user', user);
 //const room = require('./controllers/')
 
 app.use(express.json());
