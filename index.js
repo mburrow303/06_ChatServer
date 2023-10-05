@@ -14,11 +14,13 @@ const db = mongoose.connection;
 db.once('open', () => console.log(`Connected to: ${MONGO}`));
 
 const user = require('./controllers/user.controller')
+const validateSession = require('./middleware/validateSession');
 
 //app.use('/user', user);
 //const room = require('./controllers/')
 
 app.use(express.json());
+app.use(require('cors')());
 app.use('/user', user);
 app.use('/room', room);
 
