@@ -28,7 +28,7 @@ router.post('/signup', async (req, res) => {
       // send a response to the client 
       res.status(200).json({
         user: newUser,
-        message: ' New User Created, Success!!',
+        message: ' New User Created, Success!!!',
         token
       })
   } catch (err) {
