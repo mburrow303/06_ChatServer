@@ -1,0 +1,51 @@
+const router = require('express').Router();
+
+const Message = require("../models/message.model");
+const User = require('../models/user.model');
+const validateSession = require('../middleware/validateSession');
+
+function errorResponse(res, err) {
+  res.status(500).json({
+    ERROR: err.message,
+  });
+};
+
+//* Create a message per room
+router.post('/create/:room_id', validateSession, async (req, res) => {
+  
+   try {
+
+    const createMessage = {
+      date: {
+
+      },
+      text: req.body.description,
+      owner: req.user._id,
+      room: req.params.room_id
+     };
+
+     const message = new Message(createMessage);
+
+     const newMessage = await message.save();
+
+     res.status(200).json({
+      message: 'New Message Created!',
+      newMessage
+     })
+     } catch (err) {
+      errorResponse(res, err);
+     }
+    });
+
+
+//* Get all messages per room
+
+
+//* Update a message
+
+
+//* Delete a message
+
+
+
+module.exports = router;

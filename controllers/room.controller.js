@@ -1,9 +1,3 @@
-
-//const router = require("./user.controller");
-//const Message = require("../models/message.model")
-
-// const router = require("./user.controller");
-//? Do we need to require express or the above (line 1)? 
 const router = require('express').Router();
 const Room = require('../models/message.rooms.model');
 const User = require('../models/user.model');
@@ -15,56 +9,9 @@ function errorResponse(res, err) {
   });
 };
 
-// Updated Room
-router.patch("/:id", validateSession, async (req, res) => {
-  try {
-
-    let _id = req.params.id;
-    let owner = req.user.id;
-
-    let updatedInfo = req.body;
-
-    const updated = await Room.findOneAndUpdated({ id, owner}, updatedInfo, {new: true});
-
-    if (!updated)
-      throw new Error("Invalid Room/User Combination")
-
-      res.status(200).json({
-        message: `${updated._id} Updated Room!!`,
-        updated
-      });
-    
-  } catch (err) {
-    errorResponse(res, err);
-  }
-});
-
-// Delete Rooom
-router.delete('/:id', validateSession, async function(req, res){
-  try {
-    let { id } = req.params;
-    let owner = req.user.id;
-
-    const deletedRoom = await Room.deleteOne({_id: id, owner});
-
-    if(!deletedRoom.deleteCount) {
-      throw new Error('No Room Avaiable')
-    }
-
-    res.status(200).json({
-      message: 'Room Deleted!!!',
-      deletedRoom
-    });
-
-  } catch (error) {
-    errorResponse(res, err);
-    
-  }
-})
-
 //* Add a new Room
 router.post('/create', validateSession, async (req, res) => {
-console.log('hello');
+  
  try {
  
  const createRoom = {
@@ -114,6 +61,53 @@ const getAllRooms = await Room.find();
   errorResponse(res, err);
  } 
 });
+
+// Updated Room
+router.patch("/:id", validateSession, async (req, res) => {
+  try {
+
+    let _id = req.params.id;
+    let ownerId = req.user.id;
+
+    let updatedInfo = req.body;
+
+    const updated = await Room.findOneAndUpdate({ _id, ownerId}, updatedInfo, {new: true});
+
+    if (!updated)
+      throw new Error("Invalid Room/User Combination")
+
+      res.status(200).json({
+        message: `Updated Room!!`,
+        updated
+      });
+    
+  } catch (err) {
+    errorResponse(res, err);
+  }
+});
+
+// Delete Rooom
+router.delete('/:id', validateSession, async function(req, res){
+  try {
+    let {id} = req.params;
+    let ownerId = req.user.id;
+
+    const deletedRoom = await Room.deleteOne({_id: id, ownerId});
+
+    if(!deletedRoom.deletedCount) {
+      throw new Error('No Room Avaiable')
+    }
+
+    res.status(200).json({
+      message: 'Room Deleted!!!',
+      deletedRoom
+    });
+
+  } catch (err) {
+    errorResponse(res, err);
+    
+  }
+})
 
 
 module.exports = router;
