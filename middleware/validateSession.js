@@ -9,12 +9,11 @@ async function validateSession(req, res, next) {
 
     const user = await User.findById(decoded.id);
 
-    if (!user) throw new Error('User Not Found');
+    if (!user) throw new Error("User Not Found");
 
     req.user = user;
 
     return next();
-    
   } catch (err) {
     res.status(403).json({ message: err.message });
   }
