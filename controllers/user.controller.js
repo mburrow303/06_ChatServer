@@ -37,7 +37,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-//* Login to account
+//* Login to an account
 router.post("/login", async function (req, res) {
   try {
     const { email, password } = req.body;

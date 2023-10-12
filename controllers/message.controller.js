@@ -44,10 +44,10 @@ router.post("/create/:room_id", validateSession, async (req, res) => {
 //* Get all messages per room
 
 
-//* Update a message
+//* Update message
 
 
-//* Delete a message
+//* Delete message
 
 
 module.exports = router;
