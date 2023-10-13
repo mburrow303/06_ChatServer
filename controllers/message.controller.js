@@ -14,17 +14,11 @@ function errorResponse(res, err) {
 //* Create a message per room
 router.post("/create/:id", validateSession, async (req, res) => {
   try {
-    const time = new Date().toLocaleString();
+    //const time = new Date().toLocaleString();
     
     const createMessage = {
-      date: {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-      },
-      text: req.body.description,
+      
+      text: req.body.text,
       owner: req.user._id,
       room: req.params._id,
     };
@@ -43,7 +37,17 @@ router.post("/create/:id", validateSession, async (req, res) => {
 });
 
 //* Get all messages per room
-
+router.get('/list/:id', async(req, res) => {
+  try {
+   const getAllMessages = await Message.find();
+   getAllMessages.length > 0 ?
+   res.status(200).json({getAllMessages})
+   :
+   res.status(404).json({message: "No Messages Found"})
+  } catch (err) {
+    errorResponse(res, err);
+  }
+});
 
 //* Update message
 
