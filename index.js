@@ -11,10 +11,13 @@ db.once("open", () => console.log(`Connected to: ${MONGO}`));
 
 const user = require("./controllers/user.controller");
 const room = require("./controllers/room.controller");
+const message = require("./controllers/message.controller");
 
 app.use(express.json());
 app.use(require("cors")());
 app.use("/user", user);
 app.use("/room", room);
+app.use("/message", message);
+
 
 app.listen(PORT, () => console.log(`App is listening on port ${PORT}`));

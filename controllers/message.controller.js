@@ -11,10 +11,10 @@ function errorResponse(res, err) {
 }
 
 //* Create a message per room
-router.post("/create/:room_id", validateSession, async (req, res) => {
+router.post("/create/:id", validateSession, async (req, res) => {
   try {
     const time = new Date().toLocaleString();
-
+    
     const createMessage = {
       date: {
         year: "numeric",
@@ -25,7 +25,7 @@ router.post("/create/:room_id", validateSession, async (req, res) => {
       },
       text: req.body.description,
       owner: req.user._id,
-      room: req.params.room_id,
+      room: req.params._id,
     };
 
     const message = new Message(createMessage);
