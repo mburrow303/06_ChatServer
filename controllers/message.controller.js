@@ -4,6 +4,7 @@ const Message = require("../models/message.model");
 const User = require("../models/user.model");
 const validateSession = require("../middleware/validateSession");
 
+
 function errorResponse(res, err) {
   res.status(500).json({
     ERROR: err.message,
@@ -48,6 +49,7 @@ router.post("/create/:room_id", validateSession, async (req, res) => {
 
 
 //* Delete message
+
 
 
 module.exports = router;
