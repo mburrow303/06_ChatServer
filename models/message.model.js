@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
 
 const MessageSchema = new mongoose.Schema({
-  date: {
-    type: String,
-    require: true,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
   },
   text: {
     type: String,
@@ -15,7 +19,7 @@ const MessageSchema = new mongoose.Schema({
   },
   room: {
     type: String,
-    required: true,
+    required: false,
   },
 });
 
