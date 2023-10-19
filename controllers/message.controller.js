@@ -50,10 +50,47 @@ router.get('/list/:id', async(req, res) => {
 });
 
 //* Update message
+router.patch("/:_id", validateSession, async (req, res) => {
+  try {
+      let id = req.params._id;
+      let ownerId = req.user._id;
+      //let room = req.params._id
 
+      let updatedInfo = req.body.text;
+
+      const updated = await Message.findOneAndUpdate({id, ownerId}, updatedInfo, {new: true});
+
+      if (!updated) 
+        throw new Error("Invalid Message/Room Combination")
+
+      res.status(200).json({
+        message: "Updated Message!", 
+        updated
+      });
+  } catch (err) {
+    errorResponse(res, err);
+  }
+});
 
 //* Delete message
+router.delete('/:id', validateSession, async function(req, res) {
+  try {
+    let { id } = req.params._id;
+    let ownerId = req.user._id;
 
+    const deletedMessage = await Message.deleteOne({_id: id, ownerId});
+    if (!deletedMessage.deletedCount) {
+      throw new Error('Message Not Found :(')
+    }
 
+    res.status(200).json({ 
+      message:' Message Deleted!', 
+      deletedMessage
+    });
+  } catch (err) {
+    errorResponse(res, err);
+  }
+
+});
 
 module.exports = router;
