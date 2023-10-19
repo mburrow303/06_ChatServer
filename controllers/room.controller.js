@@ -11,7 +11,7 @@ function errorResponse(res, err) {
 
 //* Add a new Room
 router.post('/create', validateSession, async (req, res) => {
-  console.log('hello');
+  
   try {
     
     const createRoom = {
@@ -39,7 +39,7 @@ router.get('/create/:id', async(req, res) => {
   
   try {
     const singleRoom = await Room.findOne({_id:req.params.id});
-    const user = await User.findById(singleRoom.owner);
+    const user = await User.findById(singleRoom.ownerId);
     
     res.status(200).json({found: singleRoom, owner: User});
   } catch (err) {
@@ -62,83 +62,11 @@ router.get('/list', async(req, res) => {
   } 
 });
 
-// Updated Room
-router.patch("/:id", validateSession, async (req, res) => {
-
-//* Add a new Room
-router.post("/create", validateSession, async (req, res) => {
-
-  try {
-    const createRoom = {
-      title: req.body.title,
-      description: req.body.description,
-      messages: req.body.messages,
-      ownerId: req.user._id,
-    };
-
-
-    let id = req.params.id;
-    let owner = req.user.id;
-
-    let updatedInfo = req.body;
-
-    const updated = await Room.findOneAndUpdated({ id, owner}, updatedInfo, {new: true});
-
-    const room = new Room(createRoom);
-
-
-    const newRoom = await room.save();
-
-    res.status(200).json({
-      message: "New Room Created!",
-      room: newRoom,
-    });
-  } catch (err) {
-    errorResponse(res, err);
-  }
-});
-
-//* Get One Room
-router.get("/create/:id", async (req, res) => {
-  try {
-
-    let { _id } = req.params;
-    let ownerId = req.user.id;
-
-    const deletedRoom = await Room.deleteOne({_id: id, owner});
-
-    const singleRoom = await Room.findOne({ _id: req.params.id });
-    const user = await User.findById(singleRoom._id);
-
-
-    res.status(200).json({found: singleRoom});
-  } catch (err) {
-    errorResponse(res, err);
-  }
-});
-
-//* Get All Rooms
-router.get("/list", async (req, res) => {
-  try {
-    const getAllRooms = await Room.find();
-
-    getAllRooms.length > 0
-      ? res.status(200).json({ getAllRooms })
-      : res.status(404).json({ message: "No Rooms Found" });
-  } catch (err) {
-    errorResponse(res, err);
-  }
-
-})
-
-});
-
 //* Update a Room
 router.patch("/:id", validateSession, async (req, res) => {
   try {
     let _id = req.params.id;
     let ownerId = req.user.id;
-
     let updatedInfo = req.body;
 
     const updated = await Room.findOneAndUpdate({ _id, ownerId }, updatedInfo, {
@@ -176,7 +104,6 @@ router.delete("/:id", validateSession, async function (req, res) {
     errorResponse(res, err);
   }
 });
-
 
 
 module.exports = router;
