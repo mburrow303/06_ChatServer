@@ -105,5 +105,4 @@ router.delete("/:id", validateSession, async function (req, res) {
   }
 });
 
-
 module.exports = router;

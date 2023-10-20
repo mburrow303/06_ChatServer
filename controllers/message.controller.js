@@ -14,13 +14,12 @@ function errorResponse(res, err) {
 //* Create a message per room
 router.post("/create/:id", validateSession, async (req, res) => {
   try {
-    //const time = new Date().toLocaleString();
     
     const createMessage = {
-      
+      //const time = new Date().toLocaleString();
       text: req.body.text,
-      owner: req.user._id,
-      room: req.params._id,
+      owner: req.user.id,
+      room: req.params.id,
     };
 
     const message = new Message(createMessage);
@@ -49,19 +48,19 @@ router.get('/list/:id', async(req, res) => {
   }
 });
 
-//* Update message
-router.patch("/:_id", validateSession, async (req, res) => {
+//* Update a message
+router.patch("/:id", validateSession, async (req, res) => {
   try {
-      let id = req.params._id;
-      let ownerId = req.user._id;
-      //let room = req.params._id
+      
+      let ownerId = req.user.id;
+      let message = req.params.id;
 
-      let updatedInfo = req.body.text;
+      let updatedInfo = req.body;
 
-      const updated = await Message.findOneAndUpdate({id, ownerId}, updatedInfo, {new: true});
+      const updated = await Message.findOneAndUpdate({_id: message, owner: ownerId}, updatedInfo, {new: true});
 
       if (!updated) 
-        throw new Error("Invalid Message/Room Combination")
+        throw new Error("Invalid Message/User Combination")
 
       res.status(200).json({
         message: "Updated Message!", 
@@ -72,13 +71,15 @@ router.patch("/:_id", validateSession, async (req, res) => {
   }
 });
 
-//* Delete message
+//* Delete a message
 router.delete('/:id', validateSession, async function(req, res) {
   try {
-    let { id } = req.params._id;
-    let ownerId = req.user._id;
 
-    const deletedMessage = await Message.deleteOne({_id: id, ownerId});
+    let {id} = req.params;
+    let ownerId = req.user.id;
+
+    const deletedMessage = await Message.deleteOne({_id: id, owner: ownerId});
+
     if (!deletedMessage.deletedCount) {
       throw new Error('Message Not Found :(')
     }
@@ -90,7 +91,6 @@ router.delete('/:id', validateSession, async function(req, res) {
   } catch (err) {
     errorResponse(res, err);
   }
-
 });
 
 module.exports = router;
